@@ -58,3 +58,94 @@ print_vertical_lines () { # ${1} - height_block ${2} - width_block
 		(( j = j + 1 ))
 	done
 }
+
+print_x() { #${1}-line ${2}-col ${3} - height ${4}-style
+	cross_color=$(tput setaf 4)
+	case "$3" in
+		"1")  symbol=('x');;
+		"5")  symbol=('xxx   xxx' ' xxx xxx ' '   xxx   ' ' xxx xxx ' 'xxx   xxx') ;;
+		"15") symbol=(
+			'xxxxxxxxxxx             xxxxxxxxxxx'
+			' xxxxxxxxxxx           xxxxxxxxxxx '
+			'  xxxxxxxxxxx         xxxxxxxxxxx  '
+			'   xxxxxxxxxxx       xxxxxxxxxxx   '
+			'    xxxxxxxxxxx     xxxxxxxxxxx    '
+			'     xxxxxxxxxxx   xxxxxxxxxxx     '
+			'      xxxxxxxxxxx xxxxxxxxxxx      '
+			'        xxxxxxxxxxxxxxxxxxx        '
+			'      xxxxxxxxxxx xxxxxxxxxxx      '
+			'     xxxxxxxxxxx   xxxxxxxxxxx     '
+			'    xxxxxxxxxxx     xxxxxxxxxxx    '
+			'   xxxxxxxxxxx       xxxxxxxxxxx   '
+			'  xxxxxxxxxxx         xxxxxxxxxxx  '
+			' xxxxxxxxxxx           xxxxxxxxxxx '
+			'xxxxxxxxxxx             xxxxxxxxxxx'
+		) ;;
+	esac
+	for (( i=0; i < $3; i++ )) do
+		print_row_symbol $(($1 + $i)) $2 "$civis$cross_color$4${symbol[$i]}$offattr"
+	done
+}
+
+print_0 () { #${1}-line ${2}-col ${3} - height ${4}-style
+	zero_color=$(tput setaf 3)
+	case "$3" in
+		"1")  symbol=('0');;
+		"5")  symbol=(' 0000000 ' '000   000' '00     00' '000   000' ' 0000000 ') ;;
+		"15") symbol=(                           
+			'          00000000000000           '
+			'        000000000000000000         '
+			'      0000000000000000000000       '
+			'    000000000         000000000    ' 
+			'   00000000             00000000   ' 
+			'   0000000               0000000   ' 
+			'   0000000               0000000   ' 
+			'   0000000               0000000   ' 
+			'   0000000               0000000   ' 
+			'   0000000               0000000   ' 
+			'   00000000             00000000   ' 
+			'    000000000         000000000    ' 
+			'      0000000000000000000000       '
+			'        000000000000000000         '
+			'          00000000000000           '
+		) ;;
+	esac
+
+	for (( i=0; i < $3; i++ )) do
+		print_row_symbol $(($1 + $i)) $2 "$civis$4$zero_color${symbol[$i]}$offattr"
+	done
+}
+
+print_empty () { #${1}-line ${2}-col ${3} - height
+	case "$3" in
+		"1")  symbol=(' ');;
+		"5")  symbol=('         ' '         ' '         ' '         ' '         ') ;;
+		"15") symbol=(                           
+			'                                   '
+			'                                   '
+			'                                   '
+			'                                   ' 
+			'                                   ' 
+			'                                   ' 
+			'                                   ' 
+			'                                   ' 
+			'                                   ' 
+			'                                   ' 
+			'                                   ' 
+			'                                   ' 
+			'                                   '
+			'                                   '
+			'                                   '
+		) ;;
+	esac
+
+	for (( i=0; i < $3; i++ )) do
+		print_row_symbol $(($1 + $i)) $2 "$civis${symbol[$i]}"
+	done
+}
+
+print_row_symbol() { #${1}-line ${2}-col  ${3}-string
+	tput cup $1 $2
+	echo -n "$3" 
+}
+

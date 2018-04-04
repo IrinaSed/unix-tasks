@@ -60,7 +60,7 @@ int main (int argc,char *aa[])
         if (status_char == 1) {
             write(fd, &buffer[position], offset);
         } else {
-            lseek(1, offset, position);
+            lseek(fd, offset, position);
         }
         
         count = read(0, buffer, step);

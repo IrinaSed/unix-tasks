@@ -15,7 +15,7 @@ int main (int argc,char *aa[])
     if (fd == -1)
     {
         fputs("Sorry, can not open file for writing", stdout);
-        return 0;
+        return -1;
     }
     
     int position, i, offset;
@@ -28,7 +28,8 @@ int main (int argc,char *aa[])
     
     if (count == -1) { // проверяем количество прочитанных байт
         fputs("Sorry, I can't read this file, an error occurred", stdout);
-        return 0;
+        close(fd);
+        return -1;
     }
     
     int status_char = buffer[0] == 0 ? 0 : 1;

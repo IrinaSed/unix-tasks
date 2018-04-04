@@ -1,8 +1,23 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
 
-int main ()
+int main (int argc,char *aa[])
 {
+    char* filename = "new_file";
+    
+    if(aa[1]){
+        filename = aa[1];
+    }
+    
+    int fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+    
+    if (fd == -1)
+    {
+        fputs("Sorry, can not open file for writing", stdout);
+        return 0;
+    }
+    
     int position, i, offset;
     
     int step = 3; // читать по однобу байту слишком долго, поэтому читаем по 2 Кбайта
@@ -12,7 +27,8 @@ int main ()
     int count = read(0, buffer, step);
     
     if (count == -1) { // проверяем количество прочитанных байт
-        write(1, "Sorry, I can't read this file, an error occurred", 49);
+        fputs("Sorry, I can't read this file, an error occurred", stdout);
+        return 0;
     }
     
     int status_char = buffer[0] == 0 ? 0 : 1;
@@ -25,7 +41,7 @@ int main ()
         for (i=0; i < count; i++) {
             if (status_char == 1 && buffer[i] == 0) { //меняестся статус - идут нули
                 status_char = 0;
-                write(1, &buffer[position], offset);
+                write(fd, &buffer[position], offset);
                 position += offset;
             }
 
@@ -41,13 +57,15 @@ int main ()
         
         // сменили статус, но, не выполнили write или lseek
         if (status_char == 1) {
-            write(1, &buffer[position], offset);
+            write(fd, &buffer[position], offset);
         } else {
             lseek(1, offset, position);
         }
         
         count = read(0, buffer, step);
     }
+    
+    close(fd);
     
     return 0;
 }

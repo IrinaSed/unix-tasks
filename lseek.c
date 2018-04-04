@@ -48,7 +48,7 @@ int main (int argc,char *aa[])
 
             if (status_char == 0 && buffer[i] != 0) {//меняестся статус - идут единицы
                 status_char = 1;
-                lseek(fd, offset, position);
+                lseek(fd, offset, SEEK_CUR);
                 position += offset;
                 offset = 0;
             }
@@ -60,7 +60,7 @@ int main (int argc,char *aa[])
         if (status_char == 1) {
             write(fd, &buffer[position], offset);
         } else {
-            lseek(fd, offset, position);
+            lseek(fd, offset, SEEK_CUR);
         }
         
         count = read(0, buffer, step);

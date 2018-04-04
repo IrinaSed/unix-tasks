@@ -48,7 +48,7 @@ int main (int argc,char *aa[])
 
             if (status_char == 0 && buffer[i] != 0) {//меняестся статус - идут единицы
                 status_char = 1;
-                lseek(1, offset, position);
+                lseek(fd, offset, position);
                 position += offset;
                 offset = 0;
             }

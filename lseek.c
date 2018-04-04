@@ -20,7 +20,7 @@ int main (int argc,char *aa[])
     
     int position, i, offset;
     
-    int step = 3; // читать по однобу байту слишком долго, поэтому читаем по 2 Кбайта
+    int step = 2048; // читать по однобу байту слишком долго, поэтому читаем по 2 Кбайта
     
     char buffer[step];
     

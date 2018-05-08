@@ -39,12 +39,18 @@ List* separate_numbers(char* all_data, int all_data_len) {
             continue;
         
         int len = 0;
+        int index = i;
         
         while (i + len < all_data_len && isdigit(all_data[i + len]))
             len++;
         
-        List_append(l, substr(all_data, i, len));
-        i += len - 1;
+        if (i > 0 && all_data[i - 1] == '-') {
+            index = i - 1;
+            len += 1;
+        }
+        
+        List_append(l, substr(all_data, index, len));
+        i = index + len - 1;
     }
     
     return l;
@@ -54,13 +60,21 @@ int cmp_chars(const void* a, const void* b) {
     char* ca = *(char**)a;
     char* cb = *(char**)b;
     
-    if (strlen(ca) < strlen(cb))
-        return -1;
+    int signs = ca[0] == '-' && cb[0] != '-' ? -1 : (ca[0] != '-' && cb[0] == '-' ? 1 : 0);
     
-    if (strlen(ca) > strlen(cb))
-        return 1;
+    if (signs == 0) {
+        int flag = ca[0] == '-' ? -1 : 1;
+        
+        if (strlen(ca) < strlen(cb))
+            return -1 * flag;
+        
+        if (strlen(ca) > strlen(cb))
+            return 1 * flag;
+        
+        return strcmp(ca, cb) * flag;
+    }
     
-    return strcmp(ca, cb);
+    return signs;
 }
 
 int main(int argc, char *argv[]) {
